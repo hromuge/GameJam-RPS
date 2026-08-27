@@ -177,10 +177,9 @@ public class GameManager : MonoBehaviour
                 }
             };
 
-            if (winnerPlayerId == "None" && currentPlayer == _currentLobby.HostId)
+            if (winnerPlayerId == "None")
             {
                 updateLobbyOptions.Data.Add("IsDraw", new DataObject(DataObject.VisibilityOptions.Public, "True"));
-                await LobbyService.Instance.UpdateLobbyAsync(_currentLobby.Id, updateLobbyOptions);
             }
             else if (winnerPlayerId == currentPlayer)
             {
@@ -193,6 +192,11 @@ public class GameManager : MonoBehaviour
                 };
                 
                 await LobbyService.Instance.UpdatePlayerAsync(_currentLobby.Id, winnerPlayerId, updatePlayerOptions);
+            }
+
+            if (currentPlayer == _currentLobby.HostId)
+            {
+                await LobbyService.Instance.UpdateLobbyAsync(_currentLobby.Id, updateLobbyOptions);
             }
             
             _roundOver = true;

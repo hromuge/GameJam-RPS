@@ -196,16 +196,23 @@ public class LobbyManager : MonoBehaviour
     private async void HandleLobbyUpdate()
     {
         if (_joinedLobby == null) return;
-        
-        _lobbyUpdateTimer -= Time.deltaTime;
-        if (_lobbyUpdateTimer <= 0f)
-        {
-            _lobbyUpdateTimer = lobbyUpdateInterval;
-            Lobby updatedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
-        
-            _joinedLobby = updatedLobby;
-        }
 
+        try
+        {
+            _lobbyUpdateTimer -= Time.deltaTime;
+            if (_lobbyUpdateTimer <= 0f)
+            {
+                _lobbyUpdateTimer = lobbyUpdateInterval;
+                Lobby updatedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
+
+                _joinedLobby = updatedLobby;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+        
         GameManager.Instance.SetLobby(_joinedLobby);
         UpdateUI();
     }
@@ -244,6 +251,12 @@ public class LobbyManager : MonoBehaviour
                 gamePanel.SetActive(true);
                 stampsGroup.SetActive(true);
                 selectionGroup.SetActive(false);
+            }
+
+            if (_joinedLobby.Data.ContainsKey("RoundOver") && _joinedLobby.Data["RoundOver"].Value == "True")
+            {
+                stampsGroup.SetActive(false);
+                selectionGroup.SetActive(true);
             }
         }
     }
