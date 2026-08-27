@@ -18,12 +18,19 @@ public class LobbyManager : MonoBehaviour
     private float _lobbyUpdateTimer;
     private string _playerName;
     private bool _isLobbyFull;
+    private bool _gameStarted;
 
     [SerializeField]
     private float heartbeatInterval = 15;
     
     [SerializeField]
     private float lobbyUpdateInterval = 1.1f;
+    
+    [SerializeField]
+    private GameObject stampsGroup;
+    
+    [SerializeField]
+    private GameObject selectionGroup;
 
     public TMP_InputField lobbyCodeInput;
     public TMP_InputField playerNameInput;
@@ -34,25 +41,30 @@ public class LobbyManager : MonoBehaviour
 
     public Button startButton;
     
+    public GameObject lobbyPanel;
+    public GameObject gamePanel;
+    
 
     private async void Start()
     {
-        if (PlayerPrefs.GetString("PlayerName") != null)
-        {
-            _playerName = PlayerPrefs.GetString("PlayerName");
-            playerNameInput.text = _playerName;
-        }
-        else
-        {
-            _playerName = "Player" + UnityEngine.Random.Range(1000, 5000);
-            playerNameInput.text = _playerName;
-            PlayerPrefs.SetString("PlayerName", _playerName);
-        }
+        gamePanel.SetActive(false);
+        
         try
         {
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             Debug.Log($"Sign in anonymously succeeded! PlayerID is: {AuthenticationService.Instance.PlayerId}");
+            if (PlayerPrefs.GetString("PlayerName") != null)
+            {
+                _playerName = PlayerPrefs.GetString("PlayerName");
+                playerNameInput.text = _playerName;
+            }
+            else
+            {
+                _playerName = "Player" + UnityEngine.Random.Range(1000, 5000);
+                playerNameInput.text = _playerName;
+                PlayerPrefs.SetString("PlayerName", _playerName);
+            }
         }
         catch (Exception e)
         {
@@ -102,7 +114,12 @@ public class LobbyManager : MonoBehaviour
             CreateLobbyOptions createLobbyOptions = new CreateLobbyOptions
             {
                 IsPrivate = true,
-                Player = CreatePlayer(playerName)
+                Player = CreatePlayer(playerName),
+                Data = new Dictionary<string, DataObject>
+                {
+                    {"GameStarted", new DataObject(DataObject.VisibilityOptions.Public, "False")},
+                    {"RoundOver", new DataObject(DataObject.VisibilityOptions.Public, "False")},
+                }
             };
             
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, createLobbyOptions);
@@ -164,6 +181,7 @@ public class LobbyManager : MonoBehaviour
             data: new Dictionary<string, PlayerDataObject>
             {
                 { "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName) },
+                { "IsWinner", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, "False") },
             });
     }
 
@@ -188,6 +206,7 @@ public class LobbyManager : MonoBehaviour
             _joinedLobby = updatedLobby;
         }
 
+        GameManager.Instance.SetLobby(_joinedLobby);
         UpdateUI();
     }
 
@@ -209,13 +228,23 @@ public class LobbyManager : MonoBehaviour
             {
                 clientPlayerLabel.text = displayName;
             }
-            
         }
 
         if (_joinedLobby.Players.Count == 2)
         {
-            startButton.interactable = true;
-            startButton.gameObject.SetActive(IsHost()); 
+            startButton.interactable = IsHost();
+        }
+
+        if (_joinedLobby.Data != null)
+        {
+            if (!_gameStarted && _joinedLobby.Data.ContainsKey("GameStarted") && _joinedLobby.Data["GameStarted"].Value == "True")
+            {
+                _gameStarted = true;
+                lobbyPanel.SetActive(false);
+                gamePanel.SetActive(true);
+                stampsGroup.SetActive(true);
+                selectionGroup.SetActive(false);
+            }
         }
     }
 
