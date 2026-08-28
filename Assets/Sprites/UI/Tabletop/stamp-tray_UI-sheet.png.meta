@@ -1,28 +1,28 @@
 fileFormatVersion: 2
-guid: 5ab9080bde3cc2b7b8c55b4b6cdd6523
+guid: 4d0b3311d80c333858a1cd734e509f77
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1844491949770768709
-    second: stamp-tray_UI(320x240)_0
+      213: 2361028043821373509
+    second: stamp-tray_UI-sheet_0
   - first:
-      213: 5018148297772722993
-    second: stamp-tray_UI(320x240)_1
+      213: 6815199456085433692
+    second: stamp-tray_UI-sheet_1
   - first:
-      213: -9101301929485208858
-    second: stamp-tray_UI(320x240)_2
+      213: -1365098494170503926
+    second: stamp-tray_UI-sheet_2
   - first:
-      213: 6089609675522434413
-    second: stamp-tray_UI(320x240)_3
+      213: -6165723370073957671
+    second: stamp-tray_UI-sheet_3
   - first:
-      213: -2585393631847476579
-    second: stamp-tray_UI(320x240)_4
+      213: 5326346237037144999
+    second: stamp-tray_UI-sheet_4
   - first:
-      213: -6312124500168793381
-    second: stamp-tray_UI(320x240)_5
+      213: -1968697072440842033
+    second: stamp-tray_UI-sheet_5
   - first:
-      213: 8343581882917254194
-    second: stamp-tray_UI(320x240)_6
+      213: -4534961198969054165
+    second: stamp-tray_UI-sheet_6
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -131,155 +131,155 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: stamp-tray_UI(320x240)_0
+      name: stamp-tray_UI-sheet_0
       rect:
         serializedVersion: 2
-        x: 320
+        x: 512
         y: 0
-        width: 320
-        height: 240
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 512
+        height: 288
+      alignment: 9
+      pivot: {x: 1, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5418721e7a3f89910800000000000000
-      internalID: 1844491949770768709
+      spriteID: 54855b02f7e04c020800000000000000
+      internalID: 2361028043821373509
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stamp-tray_UI(320x240)_1
+      name: stamp-tray_UI-sheet_1
       rect:
         serializedVersion: 2
-        x: 640
+        x: 1024
         y: 0
-        width: 320
-        height: 240
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 512
+        height: 288
+      alignment: 9
+      pivot: {x: 1, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 13b69fe1a4b04a540800000000000000
-      internalID: 5018148297772722993
+      spriteID: c5d586dfbc3749e50800000000000000
+      internalID: 6815199456085433692
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stamp-tray_UI(320x240)_2
+      name: stamp-tray_UI-sheet_2
       rect:
         serializedVersion: 2
-        x: 960
+        x: 1536
         y: 0
-        width: 320
-        height: 240
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 512
+        height: 288
+      alignment: 9
+      pivot: {x: 1, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6e2f47bad1ea1b180800000000000000
-      internalID: -9101301929485208858
+      spriteID: 5cab78a22c168a963b9796e9596934de
+      internalID: 1967967441
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stamp-tray_UI(320x240)_3
+      name: stamp-tray_UI-sheet_3
       rect:
         serializedVersion: 2
-        x: 1280
+        x: 2048
         y: 0
-        width: 320
-        height: 240
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 512
+        height: 288
+      alignment: 9
+      pivot: {x: 1, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d65eb4a5cb3a28450800000000000000
-      internalID: 6089609675522434413
+      spriteID: a68450af9908980da9ddaf50e841cf4f
+      internalID: 427630447
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stamp-tray_UI(320x240)_4
+      name: stamp-tray_UI-sheet_4
       rect:
         serializedVersion: 2
-        x: 1600
+        x: 2560
         y: 0
-        width: 320
-        height: 240
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 512
+        height: 288
+      alignment: 9
+      pivot: {x: 1, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d929c299036de1cd0800000000000000
-      internalID: -2585393631847476579
+      spriteID: 3645a642f359b78b7a99ebb6a38a2ff7
+      internalID: 777756489
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stamp-tray_UI(320x240)_5
+      name: stamp-tray_UI-sheet_5
       rect:
         serializedVersion: 2
-        x: 1920
+        x: 3072
         y: 0
-        width: 320
-        height: 240
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 512
+        height: 288
+      alignment: 9
+      pivot: {x: 1, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: bd2266dc534d668a0800000000000000
-      internalID: -6312124500168793381
+      spriteID: be22d49009c9bfd69a34712f9269e481
+      internalID: -860918213
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stamp-tray_UI(320x240)_6
+      name: stamp-tray_UI-sheet_6
       rect:
         serializedVersion: 2
-        x: 2240
+        x: 3584
         y: 0
-        width: 320
-        height: 240
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 512
+        height: 288
+      alignment: 9
+      pivot: {x: 1, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 234faad248b5ac370800000000000000
-      internalID: 8343581882917254194
+      spriteID: 1b5b4787339bad9caa5ac918ee49f0de
+      internalID: 476333378
       vertices: []
       indices: 
       edges: []
@@ -288,7 +288,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 66876c3f1b614a68baacbb21461ba11c
+    spriteID: 5ece52f643ff5e416b80df7913a86e6f
     internalID: 0
     vertices: []
     indices: 
@@ -298,15 +298,17 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":320.0,"y":240.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":512.0,"y":288.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":1.0,"y":1.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":1,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+      - key: SpriteEditor.SliceOnImport
+        value: False
     nameFileIdTable:
-      stamp-tray_UI(320x240)_0: 1844491949770768709
-      stamp-tray_UI(320x240)_1: 5018148297772722993
-      stamp-tray_UI(320x240)_2: -9101301929485208858
-      stamp-tray_UI(320x240)_3: 6089609675522434413
-      stamp-tray_UI(320x240)_4: -2585393631847476579
-      stamp-tray_UI(320x240)_5: -6312124500168793381
-      stamp-tray_UI(320x240)_6: 8343581882917254194
+      stamp-tray_UI-sheet_0: 2361028043821373509
+      stamp-tray_UI-sheet_1: 6815199456085433692
+      stamp-tray_UI-sheet_2: 1967967441
+      stamp-tray_UI-sheet_3: 427630447
+      stamp-tray_UI-sheet_4: 777756489
+      stamp-tray_UI-sheet_5: -860918213
+      stamp-tray_UI-sheet_6: 476333378
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

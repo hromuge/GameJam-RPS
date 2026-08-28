@@ -11,39 +11,28 @@ using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviour
 {
-
     private Lobby _hostLobby;
     private Lobby _joinedLobby;
     private float _heartbeatTimer;
     private float _lobbyUpdateTimer;
     private string _playerName;
-    private bool _isLobbyFull;
-    private bool _gameStarted;
+    private bool _gameStartedLocal; // Merkt sich, ob wir schon ins GamePanel gewechselt haben
 
-    [SerializeField]
-    private float heartbeatInterval = 15;
-    
-    [SerializeField]
-    private float lobbyUpdateInterval = 1.1f;
-    
-    [SerializeField]
-    private GameObject stampsGroup;
-    
-    [SerializeField]
-    private GameObject selectionGroup;
+    [Header("Network Settings")]
+    [SerializeField] private float heartbeatInterval = 15f;
+    [SerializeField] private float lobbyUpdateInterval = 1.5f;
 
+    [Header("UI References")]
     public TMP_InputField lobbyCodeInput;
     public TMP_InputField playerNameInput;
-    
     public TextMeshProUGUI hostPlayerLabel;
     public TextMeshProUGUI clientPlayerLabel;
     public TextMeshProUGUI lobbyCodeLabel;
-
     public Button startButton;
+    public Button copyToClipboardButton;
     
     public GameObject lobbyPanel;
     public GameObject gamePanel;
-    
 
     private async void Start()
     {
@@ -54,7 +43,8 @@ public class LobbyManager : MonoBehaviour
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             Debug.Log($"Sign in anonymously succeeded! PlayerID is: {AuthenticationService.Instance.PlayerId}");
-            if (PlayerPrefs.GetString("PlayerName") != null)
+            
+            if (PlayerPrefs.HasKey("PlayerName"))
             {
                 _playerName = PlayerPrefs.GetString("PlayerName");
                 playerNameInput.text = _playerName;
@@ -70,7 +60,6 @@ public class LobbyManager : MonoBehaviour
         {
             Debug.LogException(e);
         }
-        
     }
 
     private void Update()
@@ -97,18 +86,9 @@ public class LobbyManager : MonoBehaviour
         {
             string lobbyName = "My Lobby";
             int maxPlayers = 2;
-            string playerName;
-
-            if (playerNameInput.text != "")
-            {
-                playerName = playerNameInput.text;
-            }
-            else
-            {
-                playerName = PlayerPrefs.GetString("PlayerName");
-            }
+            string playerName = playerNameInput.text != "" ? playerNameInput.text : PlayerPrefs.GetString("PlayerName");
+            
             PlayerPrefs.SetString("PlayerName", playerName);
-
             hostPlayerLabel.text = playerName + " (You)";
 
             CreateLobbyOptions createLobbyOptions = new CreateLobbyOptions
@@ -119,6 +99,7 @@ public class LobbyManager : MonoBehaviour
                 {
                     {"GameStarted", new DataObject(DataObject.VisibilityOptions.Public, "False")},
                     {"RoundOver", new DataObject(DataObject.VisibilityOptions.Public, "False")},
+                    {"Phase", new DataObject(DataObject.VisibilityOptions.Public, "None")} // Dummy Startwert
                 }
             };
             
@@ -128,10 +109,9 @@ public class LobbyManager : MonoBehaviour
             _joinedLobby = lobby;
             
             Debug.Log($"Lobby created: {lobby.Name} {lobby.LobbyCode}");
-            
-            lobbyCodeLabel.text = "Code: " + lobby.LobbyCode;
-            
-            PrintPlayers(_hostLobby);
+            lobbyCodeLabel.text = lobby.LobbyCode;
+            copyToClipboardButton.gameObject.SetActive(true);
+            lobbyCodeLabel.gameObject.SetActive(true);
         }
         catch (LobbyServiceException e)
         {
@@ -141,13 +121,10 @@ public class LobbyManager : MonoBehaviour
 
     public async void JoinLobby()
     {
-        
         try
         {
             string lobbyCode = Regex.Replace(lobbyCodeInput.text, @"[^\w]", "");
-            string playerName;
-
-            playerName = playerNameInput.text != "" ? playerNameInput.text : PlayerPrefs.GetString("PlayerName");
+            string playerName = playerNameInput.text != "" ? playerNameInput.text : PlayerPrefs.GetString("PlayerName");
             
             PlayerPrefs.SetString("PlayerName", playerName);
             clientPlayerLabel.text = playerName;
@@ -158,14 +135,11 @@ public class LobbyManager : MonoBehaviour
             };
         
             Lobby lobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode,  joinLobbyByCodeOptions);
-            
             _joinedLobby = lobby;
 
             if (lobby != null)
             {
                 Debug.Log($"Lobby joined: {lobbyCode}");
-                PrintPlayers(lobby);
-                lobbyCodeLabel.text = "Code: " + lobby.LobbyCode;
             }
         }
         catch (Exception e)
@@ -181,16 +155,8 @@ public class LobbyManager : MonoBehaviour
             data: new Dictionary<string, PlayerDataObject>
             {
                 { "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName) },
-                { "IsWinner", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, "False") },
+                { "IsWinner", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, "False") }
             });
-    }
-
-    private void PrintPlayers(Lobby lobby)
-    {
-        foreach (Player player in lobby.Players)
-        {
-            Debug.Log(player.Data["PlayerName"].Value);
-        }
     }
 
     private async void HandleLobbyUpdate()
@@ -203,9 +169,7 @@ public class LobbyManager : MonoBehaviour
             if (_lobbyUpdateTimer <= 0f)
             {
                 _lobbyUpdateTimer = lobbyUpdateInterval;
-                Lobby updatedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
-
-                _joinedLobby = updatedLobby;
+                _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
             }
         }
         catch (Exception e)
@@ -214,49 +178,39 @@ public class LobbyManager : MonoBehaviour
         }
         
         GameManager.Instance.SetLobby(_joinedLobby);
-        UpdateUI();
+        UpdateLobbyUI(); // Heißt jetzt UpdateLobbyUI, da es nur noch die Lobby macht
     }
 
-    private void UpdateUI()
+    private void UpdateLobbyUI()
     {
         if (_joinedLobby == null) return;
         
+        // Spieler Namen aktualisieren
         foreach (Player player in _joinedLobby.Players)
         {
             string playerName = player.Data["PlayerName"].Value;
             bool isLocal = player.Id == AuthenticationService.Instance.PlayerId;
             string displayName = isLocal ? playerName + " (You)" : playerName;
 
-            if (isLocal)
-            {
-                hostPlayerLabel.text = displayName;
-            }
-            else
-            {
-                clientPlayerLabel.text = displayName;
-            }
+            if (isLocal) hostPlayerLabel.text = displayName;
+            else clientPlayerLabel.text = displayName;
         }
 
+        // Start Button nur für Host
         if (_joinedLobby.Players.Count == 2)
         {
             startButton.interactable = IsHost();
         }
 
+        // --- HIER IST DIE TRENNUNG ---
+        // Der LobbyManager schaut nur: Geht das Spiel los? Wenn ja, Panel umschalten.
         if (_joinedLobby.Data != null)
         {
-            if (!_gameStarted && _joinedLobby.Data.ContainsKey("GameStarted") && _joinedLobby.Data["GameStarted"].Value == "True")
+            if (!_gameStartedLocal && _joinedLobby.Data.TryGetValue("GameStarted", out var started) && started.Value == "True")
             {
-                _gameStarted = true;
+                _gameStartedLocal = true;
                 lobbyPanel.SetActive(false);
                 gamePanel.SetActive(true);
-                stampsGroup.SetActive(true);
-                selectionGroup.SetActive(false);
-            }
-
-            if (_joinedLobby.Data.ContainsKey("RoundOver") && _joinedLobby.Data["RoundOver"].Value == "True")
-            {
-                stampsGroup.SetActive(false);
-                selectionGroup.SetActive(true);
             }
         }
     }
@@ -264,8 +218,6 @@ public class LobbyManager : MonoBehaviour
     private bool IsHost()
     {
         if (_joinedLobby == null) return false;
-
         return _joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
     }
-
 }
